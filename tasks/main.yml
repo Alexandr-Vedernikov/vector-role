@@ -1,34 +1,32 @@
 ---
-- name: Vector | Install rpm
+- name: Add clickhouse addresses to /etc/hosts
+  become: true
+  lineinfile:
+    dest: /etc/hosts
+    regexp: '.*{{ item }}$'
+    line: "{{ hostvars[item].ansible_host }} {{item}}"
+    state: present
+  when: hostvars[item].ansible_host is defined
+  with_items: "{{ groups.clickhouse }}"
+#Получаем дистрибутивы Vector из репозитория. Переменные (имена и версии пакетов, платформа) описываются в
+#переменных для Vector (group_vars/vector/vars.yml).
+- name: Get vector distrib
+  ansible.builtin.get_url:
+    url: "https://packages.timber.io/vector/latest/vector-{{ vector_version }}.x86_64.rpm"
+    dest: "./vector-{{ vector_version }}.x86_64.rpm"
+#Устанавливаем Vector
+- name: Install vector package
   become: true
   ansible.builtin.yum:
-    name: "{{ vector_url }}"
-    state: present
-  tags: vector
-- name: Vector | Template config
-  ansible.builtin.template:
-    src: vector.yaml.j2
-    dest: vector.yaml
-    mode: 0644
-    owner: "{{ ansible_user_id }}"
-    group: "{{ ansible_user_gid }}"
-    validate: vector validate --no-environment --config-yaml %s
-  tags: vector
-- name: Vector | Create systemd unit
+    name:
+      - "./vector-{{ vector_version }}.x86_64.rpm"
+#Правим конфигурацию из указанной в переменной groups_vars/vector/vars.yml
+- name: Create vector config
+  tags: vector_config
   become: true
-  ansible.builtin.template:
-    src: vector.service.j2
-    dest: /etc/systemd/system/vector.service
-    mode: 0644
-    owner: "{{ ansible_user_id }}"
-    group: "{{ ansible_user_gid }}"
-  tags: vector
-- name: Vector | Start service
-  become: true
-  ansible.builtin.systemd:
-    name: vector
-    state: started
-    daemon_reload: true
-  ignore_errors: "{{ ansible_check_mode }}"
-  tags: vector
-
+  ansible.builtin.copy:
+    dest: /etc/vector/config.yaml
+    content: |
+      {{ vector_config | to_nice_yaml(indent=2) }}
+  #Рестарт службы Vector
+  notify: Start Vector service
