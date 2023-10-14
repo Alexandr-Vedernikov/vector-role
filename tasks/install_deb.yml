@@ -1,0 +1,13 @@
+---
+#Получаем дистрибутивы Vector из репозитория. Переменные (имена и версии пакетов, платформа) описываются в
+#переменных для Vector (group_vars/vector/vars.yml).
+- name: Get vector distrib
+  ansible.builtin.get_url:
+    url: "{{ vector_deb_package }}"
+    dest: "./vector-{{ vector_version }}-amd64.deb"
+#Устанавливаем Vector
+- name: Install vector package
+  become: true
+  ansible.builtin.apt:
+    name:
+      - "./vector-{{ vector_version }}-amd64.deb"

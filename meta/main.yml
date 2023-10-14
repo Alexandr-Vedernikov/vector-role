@@ -2,7 +2,8 @@ galaxy_info:
   author: Vedernikov Alexandr
   description: Install Vector
   company: netology
-
+  role_name: my_name  # if absent directory name hosting role is used instead
+  namespace: my_galaxy_namespace
   # If the issue tracker for your role is not on github, uncomment the
   # next line and provide a value
   # issue_tracker_url: http://example.com/issue/tracker
