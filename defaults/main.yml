@@ -2,15 +2,19 @@
 vector_version: "0.33.0-1"
 vector_package_architecture_deb: "amd64"
 vector_package_architecture_rpm: "x86_64"
-vector_url: "https://packages.timber.io/vector/{{ vector_version | slice(0, 5) }}X/vector"
+
+#vector_url: "https://packages.timber.io/vector/{{ vector_version | slice(0, 5) }}X/vector"
+# {{ vector_version | regex_replace('^(.{5}).*$', '\\1') }}
+vector_url: "https://packages.timber.io/vector/{{ vector_version | regex_replace('^(.{5}).*$', '\\1') }}X/vector"
 
 vector_syslog_identifier: vector
 
 # Centos
-vector_rpm_package: " {{ vector_url }}-{{ vector_version }}.{{ vector_package_architecture_rpm }}.rpm"
+vector_rpm_package: "{{ vector_url }}-{{ vector_version }}.{{ vector_package_architecture_rpm }}.rpm"
         #            https://packages.timber.io/vector/0.33.X/vector-0.33.0-1.x86_64.rpm
 
 # Deb
+
 vector_deb_package: "{{ vector_url }}_{{ vector_version }}_{{ vector_package_architecture_deb }}.deb"
 #                    https://packages.timber.io/vector/0.33.X/vector_0.33.0-1_amd64.deb
 
@@ -39,7 +43,7 @@ vector_group: vector
 # vector_groups: []
 
 # Start on boot
-vector_service_enabled: True
+vector_service_enabled: yes
 # Current state: started, stopped
 vector_service_state: started
 

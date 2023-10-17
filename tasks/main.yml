@@ -1,32 +1,31 @@
 ---
+#  - name: MSG type OS
+#    gather_facts: true
+#    debug:
+#      msg: "{{ ansible_facts['ansible_distribution'] }}"
 
-- name: Check OS type and run appropriate playbook
-  hosts: all
-  gather_facts: true
-  become: true
+  - name: Determine OS
+    set_fact:
+      os_type: "{{ ansible_distribution }}"
 
-  tasks:
-    - name: Check OS type
-      set_fact:
-        os_type: "{{ ansible_facts['ansible_distribution'] }}"
+  - name: Install package on Debian
+    include_tasks: install_deb.yml
+    when: os_type == 'Debian'
+    tags:
+      - vector_install_Debian
 
-    - name: Run playbook VECTOR | Install for Debian
-      include_task: install_deb.yml
-      when: os_type == "Debian" or os_type == "Ubuntu"
-      tags:
-        Run playbook VECTOR | Install for Debian/Ubuntu
-    - name: Run playbook VECTOR | Install for CentOS
-      include_task: install_rpm.yml
-      when: os_type == "CentOS"
-      tags:
-        Run playbook VECTOR | Install for CentOS
+  - name: Install package on CentOS 7 or 8
+    include_tasks: install_rpm.yml
+    when: os_type == 'CentOS'
+    tags:
+      - vector_install_Centos
 
-    - name: VECTOR | Configure
-      include_tasks: config.yml
-      tags:
-        - vector_configure
-
-    - name: VECTOR | Service
-      include_tasks: service.yml
-      tags:
-        - vector_service
+  - name: VECTOR | Configure
+    include_tasks: config.yml
+    tags:
+      - vector_configure
+  
+  - name: VECTOR | Service
+    include_tasks: service.yml
+    tags:
+      - vector_service

@@ -1,7 +1,5 @@
 ---
 - hosts: localhost
-  remote_user: centos
+  remote_user: root
   roles:
     - vector-role
-
-
