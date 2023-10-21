@@ -1,0 +1,17 @@
+---
+- name: Preference node jenkins for test role
+  hosts: localhost
+  tasks:
+    - name: install python and pip
+      become: true
+      yum:
+        name:
+          - python3-pip*
+          - python3-setupt*
+          - pip*
+        state: present
+        update_cache: yes
+        enablerepo: "epel"
+    - name: Install Molecule python package on version 3.5.2
+      pip:
+        name: molecule==3.5.2
