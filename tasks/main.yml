@@ -25,7 +25,7 @@
     tags:
       - vector_configure
   
-  - name: VECTOR | Service
-    include_tasks: service.yml
-    tags:
-      - vector_service
+#  - name: VECTOR | Service
+#    include_tasks: service.yml
+#    tags:
+#      - vector_service
