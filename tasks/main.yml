@@ -20,12 +20,12 @@
     tags:
       - vector_install_Centos
 
-  - name: VECTOR | Configure
-    include_tasks: config.yml
-    tags:
-      - vector_configure
-  
-#  - name: VECTOR | Service
-#    include_tasks: service.yml
+#  - name: VECTOR | Configure
+#    include_tasks: config.yml
 #    tags:
-#      - vector_service
+#      - vector_configure
+  
+  - name: VECTOR | Service
+    include_tasks: service.yml
+    tags:
+      - vector_service
