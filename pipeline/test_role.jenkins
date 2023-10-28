@@ -3,6 +3,11 @@ pipeline {
         label 'ansible'
     }
     stages {
+        stage('Clear work dir') {
+            steps {
+                deleteDir()
+            }
+        }
         stage('Checkout') {
             steps {
                 checkout scm
