@@ -1,0 +1,24 @@
+pipeline {
+    agent {
+        label 'ansible'
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        stage('Bend repository') {
+            steps {
+                sh 'git clone git@github.com:Alexandr-Vedernikov/vector-role.git'
+                sh 'cd vector-role && git checkout ${BRANCH_NAME} && git submodule update --init --recursive'
+            }
+        }
+        stage('Run molecule test') {
+            steps {
+                sh 'vector-role_${BRANCH_NAME}'
+                sh 'molecule test'
+            }
+        }
+    }
+}
