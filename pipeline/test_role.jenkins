@@ -10,17 +10,14 @@ pipeline {
         }
         stage('Bend repository') {
             steps {
-                dir('vector-role') {
                 sh 'git clone git@github.com:Alexandr-Vedernikov/vector-role.git'
-                }
             }
         }
         stage('Run molecule test') {
             steps {
-                dir('vector-role') {
-                sh 'cd vector-role'
-                sh 'molecule test'
-                }
+                sh 'pwd'
+                sh 'ls -la'
+                
             }
         }
     }
