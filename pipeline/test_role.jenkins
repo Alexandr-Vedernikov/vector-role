@@ -18,7 +18,8 @@ pipeline {
         stage('Run molecule test') {
             steps {
                 dir('vector-role') {
-                sh 'ls -la'
+                sh 'cd vector-role'
+                sh 'molecule test'
                 }
             }
         }
