@@ -16,7 +16,7 @@ pipeline {
         }
         stage('Run molecule test') {
             steps {
-                sh 'vector-role_${BRANCH_NAME}'
+                sh '../vector-role_${BRANCH_NAME}'
                 sh 'molecule test'
             }
         }
