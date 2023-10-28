@@ -8,18 +8,11 @@ pipeline {
                 checkout scm
             }
         }
-        stage('Bend repository') {
-            steps {
-                dir('vector-role') {
-                sh 'git clone git@github.com:Alexandr-Vedernikov/vector-role.git'
-                }
-            }
-        }
         stage('Run molecule test') {
             steps {
-                dir('vector-role') {
+                sh 'pwd'
+                sh 'ls -la'
                 sh 'molecule test'
-                }
             }
         }
     }
