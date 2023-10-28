@@ -10,14 +10,16 @@ pipeline {
         }
         stage('Bend repository') {
             steps {
-                sh 'git clone git@github.com:Alexandr-Vedernikov/vector-role.git'
-                sh 'cd vector-role && git checkout ${BRANCH_NAME} && git submodule update --init --recursive'
+                dir('vector-role') {
+                git branch: ${BRANCH_NAME}, url: 'git@github.com:Alexandr-Vedernikov/vector-role.git'
+                }
             }
         }
         stage('Run molecule test') {
             steps {
-                sh '/opt/jenkins_agent/workspace/vector-role_${BRANCH_NAME}'
+                dir('vector-role') {
                 sh 'molecule test'
+                }
             }
         }
     }
